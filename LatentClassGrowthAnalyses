@@ -1,0 +1,51 @@
+####################################################################################
+# Latent class growth analyses in MPlus
+# Authors: Bianca de Stavola & Mplus 
+####################################################################################
+
+
+DATA:  
+FILE IS "XXX"
+            
+VARIABLE: NAMES ARE
+id sex matage mated matses 
+var1 var2 var3 var4 var5 var6 var7 var8 ;
+  
+USEV ARE
+var1 var2 var3 var4 var5 var6 var7 var8 ;
+
+MISSING ARE .;
+IDVARIABLE= id;
+CLASSES= C(4);
+CATEGORICAL ARE
+var1 var2 var3 var4 var5 var6 var7 var8 ;
+
+AUXILIARY = matage mated matses ;
+
+ANALYSIS:
+  TYPE = MIXTURE ;
+  ALGORITHM=INTEGRATION;
+ 	STARTS = 100 20;
+  STITERATIONS = 10 ;
+
+MODEL:
+%OVERALL%
+i s q | var1@-.4
+                 var2@-.3
+                 var3@-.2
+                 var4@-.1
+                 var5@0
+                 var6@0.1
+                 var7@0.2
+                 var8@0.3    ;
+      i-q@0 ;
+
+
+savedata: file is "younrame.dat" 
+SAVE = CPROB; 
+FORMAT is FREE; 
+
+PLOT:
+SERIES = var1 -var8 (S);
+TYPE = PLOT3 ; 
+OUTPUT:	TECH1 TECH8;
